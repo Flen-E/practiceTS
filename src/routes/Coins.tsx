@@ -1,7 +1,12 @@
 function Coins() {
 
     return (
-        <h1>Coins</h1>
+        <div>
+            <h1>Coins</h1>
+            <h2>Coin</h2>
+
+        </div>
+
     )
 
 }
