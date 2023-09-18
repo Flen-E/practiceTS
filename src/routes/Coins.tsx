@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
@@ -6,9 +7,6 @@ const CoinList = styled.ul``;
 
 const Coin = styled.li``;
 
-const Title = styled.h1`
-    color : ${(props) => props.theme.accentColor};
-`;
 
 interface ICoin {
     id: string;
@@ -24,21 +22,24 @@ function Coins() {
     const [coins , setCoins] = useState<ICoin[]>([]);
     useEffect(()=>{
         (async() =>{
-            const response = await (await fetch("https://api.coinpaprika.com/v1/coins")).json();
-            setCoins(response.slice(0,50));
-            console.log(setCoins);
+            await (await fetch("https://api.coinpaprika.com/v1/coins")).json()
+            .then(res => setCoins(res.slice(0,50)))
         })();
     }, []);
-    
+    useEffect(()=>{
+        (async()=>{
+            await axios.get("https://api.coinpaprika.com/v1/coins")
+            .then(res=> setCoins(res.data.slice(0,50)));
+        })();
+    },[])
+
     return (
         <>
-            <Title>코인</Title>
             <CoinList>
                 {coins.map((coin) =>(
                     <Coin key={coin.id}>
                         <Link to={`/${coin.id}`}>
                             {coin.name} &rarr;
-
                         </Link>
                     </Coin>
                 ))}
